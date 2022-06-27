@@ -14,8 +14,13 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+           let newItem = GifData(context: viewContext)
+            
+            newItem.id = UUID()
+            newItem.title = "Drama Love GIF by euphoria"
+            newItem.isFavourite = false
+            newItem.gifURL = "https://media1.giphy.com/media/3mYSRZpwbBqNu1NWNU/giphy-downsized.gif?cid=64ed0d7e6z0bh8hoj7wmbauryqdt3y1ql2t2ts4oase5dox3&rid=giphy-downsized.gif&ct=g"
+            
         }
         do {
             try viewContext.save()
@@ -50,7 +55,23 @@ struct PersistenceController {
                  */
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
+
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
+       // container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+
     }
+    
+    func save() {
+        let context = container.viewContext
+
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                // Show some error here
+            }
+        }
+    }
+
 }
